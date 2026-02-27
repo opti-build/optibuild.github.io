@@ -1,55 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>OptiBuild — Custom Systems</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #0f1115;
-      color: #ffffff;
-      text-align: center;
+    :root{
+      --bg:#0b0d10;
+      --panel:#11141a;
+      --panel2:#0f1217;
+      --text:#ffffff;
+      --muted:#c8cbd3;
+      --subtle:#8e93a3;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius:22px;
     }
-    .container {
-      padding: 80px 20px;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 50% 0%, #151a22 0%, var(--bg) 55%, #07080a 100%);
+      color:var(--text);
     }
-    h1 {
-      font-size: 48px;
-      margin-bottom: 20px;
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:26px 18px 80px}
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 10px; position:sticky; top:0;
+      backdrop-filter: blur(10px);
+      background: rgba(11,13,16,.55);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      z-index:10;
     }
-    p {
-      font-size: 18px;
-      max-width: 600px;
-      margin: 0 auto 30px auto;
-      line-height: 1.6;
-      color: #cfcfcf;
+    .brand{font-weight:700; letter-spacing:.2px}
+    .nav a{ text-decoration:none; color:var(--muted); font-size:14px; margin-left:16px}
+    .nav a:hover{color:#fff}
+    .hero{padding:70px 10px 40px; text-align:center}
+    .hero h1{font-size:54px; margin:0 0 10px; letter-spacing:-.8px}
+    .hero p{max-width:720px; margin:0 auto; color:var(--muted); line-height:1.6; font-size:17px}
+    .ctaRow{margin-top:22px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+    .btn{
+      display:inline-block; padding:12px 18px; border-radius:12px;
+      text-decoration:none; font-weight:600; font-size:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
     }
-    .btn {
-      display: inline-block;
-      padding: 14px 28px;
-      background-color: #ffffff;
-      color: #0f1115;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 6px;
-      transition: 0.3s;
+    .btnPrimary{
+      background:#fff; color:#0b0d10; border:1px solid #fff;
     }
-    .btn:hover {
-      opacity: 0.8;
+    .btn:hover{opacity:.92}
+    .sectionTitle{
+      margin:44px 0 14px; font-size:18px; letter-spacing:.2px;
+      color:#fff;
     }
+    .sectionSub{
+      margin:0 0 22px; color:var(--subtle); font-size:14px; line-height:1.6;
+      max-width:780px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+    }
+    .card{
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: var(--shadow);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      overflow:hidden;
+      position:relative;
+      min-height:170px;
+    }
+    .card:hover{ transform: translateY(-3px); border-color: rgba(255,255,255,.20);}
+    .card h3{ margin:0 0 8px; font-size:18px; letter-spacing:-.2px}
+    .card p{ margin:0; color:var(--muted); font-size:14px; line-height:1.55; max-width:92%}
+    .tag{
+      display:inline-block; margin-top:14px;
+      font-size:12px; color:#fff;
+      padding:7px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+    }
+    /* layout sizes */
+    .span-8{grid-column: span 8}
+    .span-4{grid-column: span 4}
+    .span-6{grid-column: span 6}
+    .span-12{grid-column: span 12}
+    @media (max-width: 900px){
+      .hero h1{font-size:42px}
+      .span-8,.span-6,.span-4{grid-column: span 12}
+    }
+    .footer{margin-top:60px; color:var(--subtle); font-size:13px; text-align:center}
+    .divider{height:1px;background:rgba(255,255,255,.08);margin:34px 0}
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>OptiBuild</h1>
-    <p>
-      We design and assemble precision custom systems tailored to your needs.
-      Consultation, professional assembly, optimization, and in-home setup —
-      delivered ready to perform from day one.
-    </p>
-    <a href="#" class="btn">Start Your Build</a>
+  <div class="nav">
+    <div class="wrap" style="padding:0 18px; display:flex; justify-content:space-between; align-items:center;">
+      <div class="brand">OptiBuild</div>
+      <div>
+        <a href="#signature">Signature Builds</a>
+        <a href="#consult">Consultation</a>
+        <a href="#about">About</a>
+        <a href="#sourcing">Sourcing</a>
+      </div>
+    </div>
   </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <h1>OptiBuild</h1>
+      <p>
+        Premium custom systems built around your needs — consultation, precision assembly, optimization,
+        and in-home delivery & setup. You stay comfortable. We handle the entire process.
+      </p>
+      <div class="ctaRow">
+        <a class="btn btnPrimary" href="#consult">Start Your Build</a>
+        <a class="btn" href="#signature">View Signature Builds</a>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h2 id="signature" class="sectionTitle">Signature Builds</h2>
+    <p class="sectionSub">
+      Curated examples of what we do best. Each build is tailored, tested, and delivered ready to perform.
+    </p>
+
+    <div class="grid">
+      <div class="card span-6">
+        <h3>Workstation Builds</h3>
+        <p>For productivity workloads: creation, design, heavy multitasking, and performance under deadlines.</p>
+        <span class="tag">Stability • Thermals • Speed</span>
+      </div>
+
+      <div class="card span-6">
+        <h3>Gaming Builds</h3>
+        <p>Balanced performance for your target resolution and FPS — built clean, tuned properly, and ready.</p>
+        <span class="tag">FPS • Responsiveness • Aesthetics</span>
+      </div>
+    </div>
+
+    <h2 id="consult" class="sectionTitle">Consultation</h2>
+    <p class="sectionSub">
+      We start by understanding what you actually need, then design a system that fits your goals and budget —
+      without confusion, wasted spend, or generic recommendations.
+    </p>
+
+    <div class="grid">
+      <div class="card span-8">
+        <h3>Fully Managed Build</h3>
+        <p>Consultation → parts plan → assembly → optimization & testing → delivery + in-home setup.</p>
+        <span class="tag">Premium end-to-end</span>
+      </div>
+      <div class="card span-4">
+        <h3>Planning Only</h3>
+        <p>Not ready to build? Get a clear plan and the right parts list for your exact use case.</p>
+        <span class="tag">Simple • Clear</span>
+      </div>
+    </div>
+
+    <h2 id="about" class="sectionTitle">About Us</h2>
+    <p class="sectionSub">
+      We’re a boutique build studio focused on precision, care, and measurable performance. We prioritize clean builds,
+      proper tuning, and a smooth client experience.
+    </p>
+
+    <div class="grid">
+      <div class="card span-12">
+        <h3>What “Premium” Means Here</h3>
+        <p>
+          Thoughtful component choices, clean assembly, thorough testing, and in-home setup.
+          The goal is a system that feels finished — not “just assembled.”
+        </p>
+        <span class="tag">Care • Craft • Confidence</span>
+      </div>
+    </div>
+
+    <h2 id="sourcing" class="sectionTitle">Sourcing</h2>
+    <p class="sectionSub">
+      We guide component selection based on current availability and value from trusted local retailers. Pricing and availability
+      can change — our job is to get you the best option at the time of your build.
+    </p>
+
+    <div class="grid">
+      <div class="card span-12">
+        <h3>Parts We Source</h3>
+        <p>CPUs, GPUs, motherboards, RAM, storage, cases, power supplies, cooling, and monitors — chosen to match your needs and budget.</p>
+        <span class="tag">Flexible • Up-to-date</span>
+      </div>
+    </div>
+
+    <div class="footer">
+      © <span id="y"></span> OptiBuild • Cairo, Egypt
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
