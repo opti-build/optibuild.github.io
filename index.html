@@ -2,205 +2,163 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>OptiBuild — Custom Systems</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OptiBuild</title>
+
   <style>
     :root{
-      --bg:#0b0d10;
-      --panel:#11141a;
-      --panel2:#0f1217;
-      --text:#ffffff;
-      --muted:#c8cbd3;
-      --subtle:#8e93a3;
-      --border:rgba(255,255,255,.10);
-      --shadow: 0 20px 60px rgba(0,0,0,.45);
-      --radius:22px;
+      --bg:#ffffff;
+      --text:#0b0b0b;
+      --muted:#6b6b6b;
+      --line:#e8e8e8;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 50% 0%, #151a22 0%, var(--bg) 55%, #07080a 100%);
+      background:var(--bg);
       color:var(--text);
     }
-    a{color:inherit}
-    .wrap{max-width:1100px;margin:0 auto;padding:26px 18px 80px}
-    .nav{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 10px; position:sticky; top:0;
+
+    /* Top bar */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(255,255,255,0.92);
       backdrop-filter: blur(10px);
-      background: rgba(11,13,16,.55);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      z-index:10;
+      border-bottom:1px solid var(--line);
     }
-    .brand{font-weight:700; letter-spacing:.2px}
-    .nav a{ text-decoration:none; color:var(--muted); font-size:14px; margin-left:16px}
-    .nav a:hover{color:#fff}
-    .hero{padding:70px 10px 40px; text-align:center}
-    .hero h1{font-size:54px; margin:0 0 10px; letter-spacing:-.8px}
-    .hero p{max-width:720px; margin:0 auto; color:var(--muted); line-height:1.6; font-size:17px}
-    .ctaRow{margin-top:22px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
-    .btn{
-      display:inline-block; padding:12px 18px; border-radius:12px;
-      text-decoration:none; font-weight:600; font-size:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-    }
-    .btnPrimary{
-      background:#fff; color:#0b0d10; border:1px solid #fff;
-    }
-    .btn:hover{opacity:.92}
-    .sectionTitle{
-      margin:44px 0 14px; font-size:18px; letter-spacing:.2px;
-      color:#fff;
-    }
-    .sectionSub{
-      margin:0 0 22px; color:var(--subtle); font-size:14px; line-height:1.6;
-      max-width:780px;
-    }
-    .grid{
+    .nav{
+      max-width: 1100px;
+      margin:0 auto;
+      height:64px;
       display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap:14px;
+      grid-template-columns: 1fr auto 1fr; /* left links | centered brand | right (empty for now) */
+      align-items:center;
+      padding:0 20px;
     }
-    .card{
-      border:1px solid var(--border);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border-radius: var(--radius);
-      padding:18px;
-      box-shadow: var(--shadow);
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
-      overflow:hidden;
+
+    .leftlinks{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      justify-content:flex-start;
+    }
+
+    .brand{
+      font-weight:600;
+      letter-spacing:0.2px;
+      font-size:18px;
+      text-align:center;
+    }
+
+    .rightlinks{
+      display:flex;
+      justify-content:flex-end;
+      gap:12px;
+    }
+
+    a.navlink, button.navlink{
+      appearance:none;
+      border:0;
+      background:transparent;
+      cursor:pointer;
+      padding:8px 0;
+      font-size:14px;
+      color:var(--muted);
+      text-decoration:none;
+    }
+    a.navlink:hover, button.navlink:hover{color:var(--text)}
+    a.navlink.active{color:var(--text); font-weight:600}
+
+    /* Dropdown */
+    .dropdown{
       position:relative;
-      min-height:170px;
+      display:inline-block;
     }
-    .card:hover{ transform: translateY(-3px); border-color: rgba(255,255,255,.20);}
-    .card h3{ margin:0 0 8px; font-size:18px; letter-spacing:-.2px}
-    .card p{ margin:0; color:var(--muted); font-size:14px; line-height:1.55; max-width:92%}
-    .tag{
-      display:inline-block; margin-top:14px;
-      font-size:12px; color:#fff;
-      padding:7px 10px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.20);
+    .menu{
+      position:absolute;
+      top:38px;
+      left:0;
+      min-width:180px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:8px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+      display:none;
     }
-    /* layout sizes */
-    .span-8{grid-column: span 8}
-    .span-4{grid-column: span 4}
-    .span-6{grid-column: span 6}
-    .span-12{grid-column: span 12}
-    @media (max-width: 900px){
-      .hero h1{font-size:42px}
-      .span-8,.span-6,.span-4{grid-column: span 12}
+    .menu a{
+      display:block;
+      padding:10px 10px;
+      border-radius:10px;
+      color:var(--text);
+      text-decoration:none;
+      font-size:14px;
     }
-    .footer{margin-top:60px; color:var(--subtle); font-size:13px; text-align:center}
-    .divider{height:1px;background:rgba(255,255,255,.08);margin:34px 0}
+    .menu a:hover{
+      background:#f5f5f5;
+    }
+    .dropdown:hover .menu{display:block;}
+
+    /* Page content placeholder */
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:70px 20px;
+    }
+    .heroTitle{
+      font-size:56px;
+      letter-spacing:-1px;
+      margin:0 0 14px;
+      line-height:1.05;
+    }
+    .heroSub{
+      max-width:720px;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.6;
+      margin:0;
+    }
+
+    @media (max-width:720px){
+      .nav{grid-template-columns: 1fr auto;}
+      .rightlinks{display:none}
+      .heroTitle{font-size:42px}
+    }
   </style>
 </head>
+
 <body>
-  <div class="nav">
-    <div class="wrap" style="padding:0 18px; display:flex; justify-content:space-between; align-items:center;">
+  <header class="topbar">
+    <nav class="nav">
+      <div class="leftlinks">
+        <div class="dropdown">
+          <button class="navlink active">Signature Builds</button>
+          <div class="menu">
+            <a href="#workstation">Workstation</a>
+            <a href="#gaming">Gaming</a>
+          </div>
+        </div>
+
+        <a class="navlink" href="consultancy.html">Consultancy</a>
+        <a class="navlink" href="about.html">About Us</a>
+        <a class="navlink" href="components.html">Sourcing</a>
+      </div>
+
       <div class="brand">OptiBuild</div>
-      <div>
-        <a href="#signature">Signature Builds</a>
-        <a href="#consult">Consultation</a>
-        <a href="#about">About</a>
-        <a href="#sourcing">Sourcing</a>
-      </div>
-    </div>
-  </div>
 
-  <div class="wrap">
-    <div class="hero">
-      <h1>OptiBuild</h1>
-      <p>
-        Premium custom systems built around your needs — consultation, precision assembly, optimization,
-        and in-home delivery & setup. You stay comfortable. We handle the entire process.
-      </p>
-      <div class="ctaRow">
-        <a class="btn btnPrimary" href="#consult">Start Your Build</a>
-        <a class="btn" href="#signature">View Signature Builds</a>
-      </div>
-    </div>
+      <div class="rightlinks"></div>
+    </nav>
+  </header>
 
-    <div class="divider"></div>
-
-    <h2 id="signature" class="sectionTitle">Signature Builds</h2>
-    <p class="sectionSub">
-      Curated examples of what we do best. Each build is tailored, tested, and delivered ready to perform.
+  <main class="wrap">
+    <h1 class="heroTitle">OptiBuild</h1>
+    <p class="heroSub">
+      Premium custom builds — designed around your needs, assembled properly, and delivered with full in-home setup.
+      (Next step: we’ll build the Apple/Adobe-style “work blocks” section under this.)
     </p>
-
-    <div class="grid">
-      <div class="card span-6">
-        <h3>Workstation Builds</h3>
-        <p>For productivity workloads: creation, design, heavy multitasking, and performance under deadlines.</p>
-        <span class="tag">Stability • Thermals • Speed</span>
-      </div>
-
-      <div class="card span-6">
-        <h3>Gaming Builds</h3>
-        <p>Balanced performance for your target resolution and FPS — built clean, tuned properly, and ready.</p>
-        <span class="tag">FPS • Responsiveness • Aesthetics</span>
-      </div>
-    </div>
-
-    <h2 id="consult" class="sectionTitle">Consultation</h2>
-    <p class="sectionSub">
-      We start by understanding what you actually need, then design a system that fits your goals and budget —
-      without confusion, wasted spend, or generic recommendations.
-    </p>
-
-    <div class="grid">
-      <div class="card span-8">
-        <h3>Fully Managed Build</h3>
-        <p>Consultation → parts plan → assembly → optimization & testing → delivery + in-home setup.</p>
-        <span class="tag">Premium end-to-end</span>
-      </div>
-      <div class="card span-4">
-        <h3>Planning Only</h3>
-        <p>Not ready to build? Get a clear plan and the right parts list for your exact use case.</p>
-        <span class="tag">Simple • Clear</span>
-      </div>
-    </div>
-
-    <h2 id="about" class="sectionTitle">About Us</h2>
-    <p class="sectionSub">
-      We’re a boutique build studio focused on precision, care, and measurable performance. We prioritize clean builds,
-      proper tuning, and a smooth client experience.
-    </p>
-
-    <div class="grid">
-      <div class="card span-12">
-        <h3>What “Premium” Means Here</h3>
-        <p>
-          Thoughtful component choices, clean assembly, thorough testing, and in-home setup.
-          The goal is a system that feels finished — not “just assembled.”
-        </p>
-        <span class="tag">Care • Craft • Confidence</span>
-      </div>
-    </div>
-
-    <h2 id="sourcing" class="sectionTitle">Sourcing</h2>
-    <p class="sectionSub">
-      We guide component selection based on current availability and value from trusted local retailers. Pricing and availability
-      can change — our job is to get you the best option at the time of your build.
-    </p>
-
-    <div class="grid">
-      <div class="card span-12">
-        <h3>Parts We Source</h3>
-        <p>CPUs, GPUs, motherboards, RAM, storage, cases, power supplies, cooling, and monitors — chosen to match your needs and budget.</p>
-        <span class="tag">Flexible • Up-to-date</span>
-      </div>
-    </div>
-
-    <div class="footer">
-      © <span id="y"></span> OptiBuild • Cairo, Egypt
-    </div>
-  </div>
-
-  <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
-  </script>
+  </main>
 </body>
 </html>
